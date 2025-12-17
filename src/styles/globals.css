@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  /* McCain Brand Colors */
+  --color-mccain-yellow: #ffc72c;
+  --color-mccain-black: #1a1a1a;
+  --color-mccain-dark: #0f0f0f;
+  --color-mccain-gray: #4a4a4a;
+  --color-mccain-light-gray: #f5f5f5;
+  
+  /* Semantic colors */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  
+  /* Status colors */
+  --color-draft: #9ca3af;
+  --color-in-review: #f59e0b;
+  --color-approved: #10b981;
+  --color-ready: #3b82f6;
+  --color-completed: #8b5cf6;
+  
+  /* Spacing */
+  --spacing-footer: 3rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #fafafa;
+  color: var(--color-mccain-black);
+}
+
+#root {
+  height: 100%;
+}
+
+h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 2.25rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 2rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.75rem;
+}
+
+h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+p {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+button {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+input, textarea, select {
+  font-size: 0.875rem;
+}
+
+label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
