@@ -1,0 +1,25 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment Variables
+.env
+.env.*
+
+# Build/Output
+dist/
+build/
+out/
+
+# Dependency Folders
+node_modules/
+vendor/
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
