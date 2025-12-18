@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, ChevronDown, Plus, Edit2, Trash2, X } from 'lucide-react';
+import McCainLogo from '../imports/McCainLogo1-33-97';
 
 interface Stakeholder {
   id: string;
@@ -137,7 +138,9 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
       <header className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-8 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-[var(--color-mccain-black)]">McCain SDLC</h1>
+            <div className="w-28 h-14">
+              <McCainLogo />
+            </div>
             
             <div className="flex items-center gap-4">
               {/* Global Search */}

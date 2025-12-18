@@ -482,6 +482,15 @@ export function IntakeBRD({ requirementId, onApprove }: IntakeBRDProps) {
                       <button className="text-sm text-blue-600 hover:underline">Open in Word</button>
                       <span className="text-gray-300">|</span>
                       <button className="text-sm text-blue-600 hover:underline">Open in SharePoint</button>
+                      <span className="text-gray-300">|</span>
+                      <button 
+                        onClick={() => {
+                          setTimeout(() => alert('Jira export generated.'), 100);
+                        }}
+                        className="text-sm text-blue-600 hover:underline"
+                      >
+                        Export to Jira
+                      </button>
                     </div>
                   </div>
 

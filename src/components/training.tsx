@@ -18,8 +18,8 @@ interface TrainingDoc {
 
 export function Training({ requirementId }: TrainingProps) {
   const [selectedDoc, setSelectedDoc] = useState<TrainingDoc | null>(null);
-  const [referenceInput, setReferenceInput] = useState('');
   const [showPublishModal, setShowPublishModal] = useState(false);
+  const [docsGenerated, setDocsGenerated] = useState(false);
 
   const [trainingDocs] = useState<TrainingDoc[]>([
     {
@@ -62,8 +62,8 @@ export function Training({ requirementId }: TrainingProps) {
   };
 
   const handlePublish = () => {
-    if (!referenceInput) {
-      alert('Provide a valid training reference');
+    if (!docsGenerated) {
+      alert('Generate training documents first');
       return;
     }
     setShowPublishModal(true);
@@ -97,81 +97,107 @@ export function Training({ requirementId }: TrainingProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left - Document Cards */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Reference Input Section */}
+            {/* Upload Section */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="mb-4">Training Reference</h2>
-              <div className="space-y-3">
-                <div>
-                  <label className="block mb-2">Training reference (link or note)</label>
-                  <input
-                    type="text"
-                    value={referenceInput}
-                    onChange={(e) => setReferenceInput(e.target.value)}
-                    placeholder="Enter URL or notes..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mccain-yellow)]"
-                  />
-                  {referenceInput && (
-                    <p className="mt-2 text-sm text-gray-600">
-                      {isValidUrl(referenceInput) ? (
-                        <span className="flex items-center gap-1 text-success">
-                          <LinkIcon size={14} /> Valid URL provided
-                        </span>
-                      ) : (
-                        <span className="text-gray-600">Note: {referenceInput.length} characters</span>
-                      )}
-                    </p>
-                  )}
+              <h2 className="mb-4">Training Inputs</h2>
+              <div className="space-y-4">
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <h4 className="font-medium">Upload Test Execution Report</h4>
+                      <p className="text-sm text-gray-600">Extract screenshots/paths/flows (.pdf/.docx/.html)</p>
+                    </div>
+                    <button className="px-4 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90">
+                      Upload
+                    </button>
+                  </div>
+                  <div className="mt-2 p-2 bg-gray-50 rounded text-sm text-gray-600">
+                    test_execution_report_20251216.pdf
+                  </div>
+                </div>
+
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <h4 className="font-medium">Upload Existing Training Doc</h4>
+                      <p className="text-sm text-gray-600">Reference template (.docx/.pdf)</p>
+                    </div>
+                    <button className="px-4 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90">
+                      Upload
+                    </button>
+                  </div>
+                  <div className="mt-2 p-2 bg-gray-50 rounded text-sm text-gray-600">
+                    training_template_v2.docx
+                  </div>
+                </div>
+
+                {/* Generate Docs Button */}
+                <div className="pt-4 border-t border-gray-200">
+                  <button
+                    onClick={() => {
+                      setDocsGenerated(true);
+                      setTimeout(() => alert('Training documents generated successfully!'), 100);
+                    }}
+                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[var(--color-mccain-black)] text-white rounded-lg hover:bg-opacity-90"
+                  >
+                    <FileText size={18} />
+                    Generate Training Docs
+                  </button>
+                  <p className="mt-2 text-sm text-gray-600">
+                    Generate training documents from existing info and uploaded files
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Document Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {trainingDocs.map((doc) => (
-                <div
-                  key={doc.id}
-                  onClick={() => setSelectedDoc(doc)}
-                  className={`bg-white rounded-lg shadow-sm border p-4 cursor-pointer hover:border-[var(--color-mccain-yellow)] transition-colors ${
-                    selectedDoc?.id === doc.id ? 'border-[var(--color-mccain-yellow)] bg-yellow-50' : 'border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className="p-2 bg-gray-100 rounded">
-                      {doc.type === 'How-to' && <FileText size={24} className="text-blue-600" />}
-                      {doc.type === 'SOP' && <BookOpen size={24} className="text-purple-600" />}
-                      {doc.type === 'FAQ' && <Users size={24} className="text-green-600" />}
+            {docsGenerated && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {trainingDocs.map((doc) => (
+                  <div
+                    key={doc.id}
+                    onClick={() => setSelectedDoc(doc)}
+                    className={`bg-white rounded-lg shadow-sm border p-4 cursor-pointer hover:border-[var(--color-mccain-yellow)] transition-colors ${
+                      selectedDoc?.id === doc.id ? 'border-[var(--color-mccain-yellow)] bg-yellow-50' : 'border-gray-200'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="p-2 bg-gray-100 rounded">
+                        {doc.type === 'How-to' && <FileText size={24} className="text-blue-600" />}
+                        {doc.type === 'SOP' && <BookOpen size={24} className="text-purple-600" />}
+                        {doc.type === 'FAQ' && <Users size={24} className="text-green-600" />}
+                      </div>
+                      <div className="flex-1">
+                        <span className={`px-2 py-1 rounded text-xs ${docTypeColors[doc.type]}`}>
+                          {doc.type}
+                        </span>
+                        <h3 className="mt-2 text-sm">{doc.title}</h3>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <span className={`px-2 py-1 rounded text-xs ${docTypeColors[doc.type]}`}>
-                        {doc.type}
-                      </span>
-                      <h3 className="mt-2 text-sm">{doc.title}</h3>
+
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {doc.audience.map((aud) => (
+                        <span key={aud} className="px-2 py-1 bg-[var(--color-mccain-yellow)] bg-opacity-20 rounded text-xs">
+                          {aud}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="text-xs text-gray-600 space-y-1">
+                      <div>Version: {doc.version}</div>
+                      <div>Author: {doc.author}</div>
+                      <div>Updated: {doc.lastUpdated}</div>
                     </div>
                   </div>
-
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {doc.audience.map((aud) => (
-                      <span key={aud} className="px-2 py-1 bg-[var(--color-mccain-yellow)] bg-opacity-20 rounded text-xs">
-                        {aud}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="text-xs text-gray-600 space-y-1">
-                    <div>Version: {doc.version}</div>
-                    <div>Author: {doc.author}</div>
-                    <div>Updated: {doc.lastUpdated}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
             {/* Action Buttons */}
             <div className="flex gap-3">
               <button
-                onClick={handlePublish}
-                disabled={!referenceInput}
-                className="flex items-center gap-2 px-6 py-3 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => setShowPublishModal(true)}
+                className="flex items-center gap-2 px-6 py-3 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90"
               >
                 <Send size={18} />
                 Publish to Knowledge Base

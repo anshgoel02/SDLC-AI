@@ -1,32 +1,17 @@
 import React, { useState } from 'react';
-import { Download, Upload, Plus, Link as LinkIcon, Calendar } from 'lucide-react';
+import { Download, Upload, Link as LinkIcon } from 'lucide-react';
 
 interface DesignProps {
   requirementId: string;
   onApprove: () => void;
 }
 
-interface Milestone {
-  id: string;
-  name: string;
-  status: 'Not Started' | 'In Progress' | 'Done';
-  dueDate: string;
-  owner: string;
-}
-
 export function Design({ requirementId, onApprove }: DesignProps) {
   const [activeTab, setActiveTab] = useState<'fd' | 'td' | 'ui'>('fd');
   const [fdStatus, setFdStatus] = useState<'In Review' | 'Approved'>('In Review');
   const [tdStatus, setTdStatus] = useState<'In Review' | 'Approved'>('In Review');
+  const [uiStatus, setUiStatus] = useState<'In Review' | 'Approved'>('In Review');
   
-  const [milestones, setMilestones] = useState<Milestone[]>([
-    { id: '1', name: 'Wireframes', status: 'Done', dueDate: '2025-12-10', owner: 'UI Design POC' },
-    { id: '2', name: 'Figma screens', status: 'In Progress', dueDate: '2025-12-15', owner: 'UI Design POC' },
-    { id: '3', name: 'Flow prototype', status: 'Not Started', dueDate: '2025-12-20', owner: 'UI Design POC' },
-    { id: '4', name: 'Review', status: 'Not Started', dueDate: '2025-12-22', owner: 'Tech Architect' },
-    { id: '5', name: 'POC validation', status: 'Not Started', dueDate: '2025-12-25', owner: 'Business Owner' }
-  ]);
-
   const [figmaLinks, setFigmaLinks] = useState<string[]>([
     'https://figma.com/file/abc123/O2C-Wireframes',
     'https://figma.com/file/def456/O2C-Final-Screens'
@@ -40,13 +25,11 @@ export function Design({ requirementId, onApprove }: DesignProps) {
 
   const handleApproveTD = () => {
     setTdStatus('Approved');
-    onApprove();
   };
 
-  const statusColors = {
-    'Not Started': 'bg-gray-300 text-gray-700',
-    'In Progress': 'bg-warning text-white',
-    'Done': 'bg-success text-white'
+  const handleApproveUI = () => {
+    setUiStatus('Approved');
+    onApprove();
   };
 
   return (
@@ -107,7 +90,12 @@ export function Design({ requirementId, onApprove }: DesignProps) {
                   : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
-              UI Prototype Tracker
+              UI Prototype
+              <span className={`ml-2 px-2 py-1 rounded text-xs ${
+                uiStatus === 'Approved' ? 'bg-success text-white' : 'bg-warning text-white'
+              }`}>
+                {uiStatus}
+              </span>
             </button>
           </div>
         </div>
@@ -118,6 +106,25 @@ export function Design({ requirementId, onApprove }: DesignProps) {
         {/* Functional Design Tab */}
         {activeTab === 'fd' && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            {/* TOP ACTION BAR */}
+            <div className="flex gap-3 mb-6 pb-6 border-b border-gray-200">
+              <button className="flex items-center gap-2 px-4 py-2 bg-[var(--color-mccain-black)] text-white rounded-lg hover:bg-opacity-90">
+                <Download size={18} />
+                Download FD (docx/pdf)
+              </button>
+              <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                <Upload size={18} />
+                Upload Final FD
+              </button>
+              <button
+                onClick={handleApproveFD}
+                disabled={fdStatus === 'Approved'}
+                className="ml-auto px-6 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Approve FD
+              </button>
+            </div>
+
             <h2 className="mb-6">Functional Design</h2>
 
             <div className="space-y-6">
@@ -168,31 +175,31 @@ export function Design({ requirementId, onApprove }: DesignProps) {
                 </ul>
               </div>
             </div>
-
-            {/* Actions */}
-            <div className="flex gap-3 mt-6 pt-6 border-t border-gray-200">
-              <button className="flex items-center gap-2 px-4 py-2 bg-[var(--color-mccain-black)] text-white rounded-lg hover:bg-opacity-90">
-                <Download size={18} />
-                Download FD (docx/pdf)
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                <Upload size={18} />
-                Upload Final FD
-              </button>
-              <button
-                onClick={handleApproveFD}
-                disabled={fdStatus === 'Approved'}
-                className="ml-auto px-6 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Approve FD
-              </button>
-            </div>
           </div>
         )}
 
         {/* Technical Design Tab */}
         {activeTab === 'td' && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            {/* TOP ACTION BAR */}
+            <div className="flex gap-3 mb-6 pb-6 border-b border-gray-200">
+              <button className="flex items-center gap-2 px-4 py-2 bg-[var(--color-mccain-black)] text-white rounded-lg hover:bg-opacity-90">
+                <Download size={18} />
+                Download TD (docx/pdf)
+              </button>
+              <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                <Upload size={18} />
+                Upload Final TD
+              </button>
+              <button
+                onClick={handleApproveTD}
+                disabled={tdStatus === 'Approved'}
+                className="ml-auto px-6 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Approve TD
+              </button>
+            </div>
+
             <h2 className="mb-6">Technical Design</h2>
 
             <div className="space-y-6">
@@ -252,66 +259,35 @@ export function Design({ requirementId, onApprove }: DesignProps) {
                 </ul>
               </div>
             </div>
-
-            {/* Actions */}
-            <div className="flex gap-3 mt-6 pt-6 border-t border-gray-200">
-              <button className="flex items-center gap-2 px-4 py-2 bg-[var(--color-mccain-black)] text-white rounded-lg hover:bg-opacity-90">
-                <Download size={18} />
-                Download TD (docx/pdf)
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                <Upload size={18} />
-                Upload Final TD
-              </button>
-              <button
-                onClick={handleApproveTD}
-                disabled={tdStatus === 'Approved'}
-                className="ml-auto px-6 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Approve TD
-              </button>
-            </div>
           </div>
         )}
 
-        {/* UI Prototype Tracker Tab */}
+        {/* UI Prototype Tab */}
         {activeTab === 'ui' && (
           <div className="space-y-6">
-            {/* Timeline Milestones */}
+            {/* Top Action Bar */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2>Timeline Milestones</h2>
-                <button className="flex items-center gap-2 px-4 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90">
-                  <Plus size={18} />
-                  Add Milestone
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => {
+                    setTimeout(() => alert('UI Prompt downloaded.'), 100);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-[var(--color-mccain-black)] text-white rounded-lg hover:bg-opacity-90"
+                >
+                  <Download size={18} />
+                  Download UI Prompt (docx/pdf)
                 </button>
-              </div>
-
-              <div className="space-y-3">
-                {milestones.map((milestone) => (
-                  <div key={milestone.id} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:border-[var(--color-mccain-yellow)] transition-colors">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h4>{milestone.name}</h4>
-                        <span className={`px-2 py-1 rounded text-xs ${statusColors[milestone.status]}`}>
-                          {milestone.status}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <span>Owner: {milestone.owner}</span>
-                        <span className="flex items-center gap-1">
-                          <Calendar size={14} />
-                          Due: {milestone.dueDate}
-                        </span>
-                      </div>
-                    </div>
-                    <button className="text-blue-600 hover:text-blue-800 text-sm">Edit</button>
-                  </div>
-                ))}
+                <button
+                  onClick={handleApproveUI}
+                  disabled={uiStatus === 'Approved'}
+                  className="ml-auto px-6 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Approve UI Prototype
+                </button>
               </div>
             </div>
 
-            {/* Paths Panel */}
+            {/* Paths & Assets Panel */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2>Paths & Assets</h2>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Link as LinkIcon, Users, Calendar } from 'lucide-react';
+import { Plus, Link as LinkIcon } from 'lucide-react';
 
 interface CodingTrackerProps {
   requirementId: string;
@@ -17,22 +17,6 @@ interface Task {
   lastUpdated: string;
 }
 
-interface Team {
-  name: string;
-  lead: string;
-  members: number;
-  contact: string;
-  status: 'Not Started' | 'In Progress' | 'Blocked' | 'Done';
-}
-
-interface Milestone {
-  id: string;
-  name: string;
-  status: 'Not Started' | 'In Progress' | 'Done';
-  dueDate: string;
-  owner: string;
-}
-
 export function CodingTracker({ requirementId, onReadyForGates }: CodingTrackerProps) {
   const [tasks, setTasks] = useState<Task[]>([
     { id: '1', title: 'Order Entry UI Component', tag: 'ui5', team: 'UI5 Frontend', assignee: 'Jane Smith', status: 'Refined', dueDate: '2025-12-18', lastUpdated: '2 hours ago' },
@@ -41,44 +25,11 @@ export function CodingTracker({ requirementId, onReadyForGates }: CodingTrackerP
     { id: '4', title: 'Order Type Configuration', tag: 'config', team: 'Config/IMG', assignee: 'Sarah Lee', status: 'Generation queued', dueDate: '2025-12-22', lastUpdated: '3 hours ago' }
   ]);
 
-  const [teams] = useState<Team[]>([
-    { name: 'UI5 Frontend', lead: 'Jane Smith', members: 4, contact: 'jane.smith@mccain.com', status: 'In Progress' },
-    { name: 'ABAP Backend', lead: 'John Doe', members: 3, contact: 'john.doe@mccain.com', status: 'In Progress' },
-    { name: 'Integration/APIs', lead: 'Mike Johnson', members: 2, contact: 'mike.j@mccain.com', status: 'Done' },
-    { name: 'Config/IMG', lead: 'Sarah Lee', members: 2, contact: 'sarah.lee@mccain.com', status: 'Not Started' },
-    { name: 'Testing', lead: 'Tom Wilson', members: 3, contact: 'tom.w@mccain.com', status: 'Not Started' },
-    { name: 'Training', lead: 'Lisa Brown', members: 2, contact: 'lisa.b@mccain.com', status: 'Not Started' },
-    { name: 'Architecture', lead: 'David Chen', members: 2, contact: 'david.c@mccain.com', status: 'In Progress' },
-    { name: 'Data & Security', lead: 'Emma Davis', members: 2, contact: 'emma.d@mccain.com', status: 'In Progress' }
-  ]);
-
-  const [milestones, setMilestones] = useState<Milestone[]>([
-    { id: '1', name: 'Scaffold', status: 'Done', dueDate: '2025-12-08', owner: 'Tech Lead' },
-    { id: '2', name: 'Core modules', status: 'In Progress', dueDate: '2025-12-15', owner: 'Dev Team' },
-    { id: '3', name: 'Integrations', status: 'In Progress', dueDate: '2025-12-20', owner: 'API Team' },
-    { id: '4', name: 'Unit tests', status: 'Not Started', dueDate: '2025-12-22', owner: 'Test Team' },
-    { id: '5', name: 'Ready for Gates', status: 'Not Started', dueDate: '2025-12-25', owner: 'Tech Architect' }
-  ]);
-
-  const [activityLog] = useState([
-    { date: '2025-12-16 10:30', actor: 'Jane Smith', action: 'Manual refinement completed', notes: 'Updated UI validation logic' },
-    { date: '2025-12-16 09:15', actor: 'System', action: 'AI generation run', notes: 'Generated ABAP function module' },
-    { date: '2025-12-15 16:45', actor: 'Mike Johnson', action: 'Commit record', notes: 'Pushed API endpoint to dev branch' },
-    { date: '2025-12-15 14:20', actor: 'John Doe', action: 'Manual refinement completed', notes: 'Added error handling' }
-  ]);
-
   const tagColors = {
     'ui5': 'bg-blue-100 text-blue-800',
     'abap': 'bg-purple-100 text-purple-800',
     'api': 'bg-green-100 text-green-800',
     'config': 'bg-orange-100 text-orange-800'
-  };
-
-  const statusColors = {
-    'Not Started': 'bg-gray-300 text-gray-700',
-    'In Progress': 'bg-warning text-white',
-    'Blocked': 'bg-error text-white',
-    'Done': 'bg-success text-white'
   };
 
   const taskStatusOptions = ['Generation queued', 'Generated', 'Refined', 'Ready for Gates'];
@@ -106,31 +57,6 @@ export function CodingTracker({ requirementId, onReadyForGates }: CodingTrackerP
       </header>
 
       <main className="max-w-7xl mx-auto px-8 py-8">
-        {/* Teams Panel */}
-        <section className="mb-6">
-          <h2 className="mb-4">Teams</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {teams.map((team) => (
-              <div key={team.name} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-[var(--color-mccain-yellow)] transition-colors">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm">{team.name}</h3>
-                  <span className={`px-2 py-1 rounded text-xs ${statusColors[team.status]}`}>
-                    {team.status}
-                  </span>
-                </div>
-                <div className="space-y-1 text-sm text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <Users size={14} />
-                    <span>Lead: {team.lead}</span>
-                  </div>
-                  <div>Members: {team.members}</div>
-                  <div className="text-xs">{team.contact}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* Tasks & Status Table */}
         <section className="mb-6">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -196,7 +122,7 @@ export function CodingTracker({ requirementId, onReadyForGates }: CodingTrackerP
           </div>
         </section>
 
-        {/* Paths Panel */}
+        {/* Paths & Resources */}
         <section className="mb-6">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h2 className="mb-4">Paths & Resources</h2>
@@ -219,75 +145,6 @@ export function CodingTracker({ requirementId, onReadyForGates }: CodingTrackerP
                   https://confluence.mccain.com/config-docs/O2C
                 </a>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Milestones */}
-        <section className="mb-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2>Milestones</h2>
-              <div className="flex gap-2">
-                <button className="flex items-center gap-2 px-4 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90">
-                  <Plus size={18} />
-                  Add milestone
-                </button>
-                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                  Edit milestone
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              {milestones.map((milestone) => (
-                <div key={milestone.id} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h4 className="text-sm font-medium">{milestone.name}</h4>
-                      <span className={`px-2 py-1 rounded text-xs ${statusColors[milestone.status]}`}>
-                        {milestone.status}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
-                      <span>Owner: {milestone.owner}</span>
-                      <span className="flex items-center gap-1">
-                        <Calendar size={14} />
-                        Due: {milestone.dueDate}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Activity Log */}
-        <section className="mb-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="mb-4">Activity Log</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4">Date</th>
-                    <th className="text-left py-3 px-4">Actor</th>
-                    <th className="text-left py-3 px-4">Action</th>
-                    <th className="text-left py-3 px-4">Notes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {activityLog.map((log, idx) => (
-                    <tr key={idx} className="border-b border-gray-100">
-                      <td className="py-3 px-4 text-sm text-gray-600">{log.date}</td>
-                      <td className="py-3 px-4 text-sm">{log.actor}</td>
-                      <td className="py-3 px-4 text-sm font-medium">{log.action}</td>
-                      <td className="py-3 px-4 text-sm text-gray-600">{log.notes}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
           </div>
         </section>

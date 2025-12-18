@@ -6,11 +6,9 @@ import { Design } from './components/design';
 import { CodingTracker } from './components/coding-tracker';
 import { BuildGates } from './components/build-gates';
 import { TestSuite } from './components/test-suite';
-import { TestExecution } from './components/test-execution';
 import { Training } from './components/training';
-import { Deployment } from './components/deployment';
 
-type Screen = 'landing' | 'intake-brd' | 'design' | 'coding-tracker' | 'build-gates' | 'test-suite' | 'test-execution' | 'training' | 'deployment';
+type Screen = 'landing' | 'intake-brd' | 'design' | 'coding-tracker' | 'build-gates' | 'test-suite' | 'training';
 
 interface NavItem {
   id: Screen;
@@ -38,9 +36,7 @@ export default function App() {
     { id: 'coding-tracker', label: 'Coding Tracker', status: 'Draft' },
     { id: 'build-gates', label: 'Build Gates', status: 'Draft' },
     { id: 'test-suite', label: 'Test Suite', status: 'Draft' },
-    { id: 'test-execution', label: 'Test Execution', status: 'Draft' },
-    { id: 'training', label: 'Training', status: 'Draft' },
-    { id: 'deployment', label: 'Deployment', status: 'Draft' }
+    { id: 'training', label: 'Training', status: 'Draft' }
   ]);
 
   const handleCreateRequirement = (data: any) => {
@@ -97,17 +93,10 @@ export default function App() {
     setCurrentScreen('test-suite');
   };
 
-  const handleRunAutomation = () => {
+  const handleTestSuiteComplete = () => {
     updateNavStatus('test-suite', 'Approved');
-    updateNavStatus('test-execution', 'In Review');
-    setCurrentScreen('test-execution');
-  };
-
-  const handleMarkReadyForDeployment = () => {
-    updateNavStatus('test-execution', 'Approved');
     updateNavStatus('training', 'Ready');
-    updateNavStatus('deployment', 'Ready');
-    setCurrentScreen('deployment');
+    setCurrentScreen('training');
   };
 
   const renderScreen = () => {
@@ -153,20 +142,11 @@ export default function App() {
         return (
           <TestSuite
             requirementId={reqId}
-            onRunAutomation={handleRunAutomation}
-          />
-        );
-      case 'test-execution':
-        return (
-          <TestExecution
-            requirementId={reqId}
-            onMarkReady={handleMarkReadyForDeployment}
+            onComplete={handleTestSuiteComplete}
           />
         );
       case 'training':
         return <Training requirementId={reqId} />;
-      case 'deployment':
-        return <Deployment requirementId={reqId} />;
       default:
         return <div>Screen not found</div>;
     }

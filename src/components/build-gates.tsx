@@ -102,121 +102,94 @@ export function BuildGates({ requirementId, onGenerateTestSuite }: BuildGatesPro
       </header>
 
       <main className="max-w-7xl mx-auto px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left - Stages (2/3 width) */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="mb-6">Quality Gates</h2>
-              <p className="text-sm text-gray-600 mb-6">
-                All stages must pass before proceeding to test suite generation. Stages are executed in order.
-              </p>
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="mb-6">Quality Gates</h2>
+          <p className="text-sm text-gray-600 mb-6">
+            All stages must pass before proceeding to test suite generation. Stages are executed in order.
+          </p>
 
-              <div className="space-y-6">
-                {stages.map((stage) => (
-                  <div key={stage.id} className="border border-gray-200 rounded-lg p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] font-semibold">
-                            {stage.id}
-                          </span>
-                          <h3>{stage.name}</h3>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {stage.status === 'Pass' && (
-                          <CheckCircle className="text-success" size={24} />
-                        )}
-                        {stage.status === 'Fail' && (
-                          <XCircle className="text-error" size={24} />
-                        )}
-                        <span className={`px-3 py-1 rounded text-sm ${
-                          stage.status === 'Pass' ? 'bg-success text-white' :
-                          stage.status === 'Fail' ? 'bg-error text-white' :
-                          'bg-gray-300 text-gray-700'
-                        }`}>
-                          {stage.status}
-                        </span>
-                      </div>
+          <div className="space-y-6">
+            {stages.map((stage) => (
+              <div key={stage.id} className="border border-gray-200 rounded-lg p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] font-semibold">
+                        {stage.id}
+                      </span>
+                      <h3>{stage.name}</h3>
                     </div>
-
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => handleRunStage(stage.id)}
-                        disabled={stage.status === 'Pass'}
-                        className="flex items-center gap-2 px-4 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <Play size={18} />
-                        {stage.buttonLabel}
-                      </button>
-                      {stage.status === 'Pass' && (
-                        <button
-                          onClick={() => handleViewEvidence(stage.name)}
-                          className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                        >
-                          <Eye size={18} />
-                          View evidence
-                        </button>
-                      )}
-                    </div>
-
-                    {stage.name.includes('Peer Review') && stage.status === 'Pass' && (
-                      <div className="mt-4 pt-4 border-t border-gray-200">
-                        <h4 className="mb-3 text-sm font-medium">Peer Review Status</h4>
-                        <div className="space-y-2">
-                          {peerReviews.map((review, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                              <span className="text-sm">{review.reviewer}</span>
-                              <span className="px-2 py-1 bg-success text-white rounded text-xs">
-                                Approved
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </div>
-                ))}
-              </div>
+                  <div className="flex items-center gap-2">
+                    {stage.status === 'Pass' && (
+                      <CheckCircle className="text-success" size={24} />
+                    )}
+                    {stage.status === 'Fail' && (
+                      <XCircle className="text-error" size={24} />
+                    )}
+                    <span className={`px-3 py-1 rounded text-sm ${
+                      stage.status === 'Pass' ? 'bg-success text-white' :
+                      stage.status === 'Fail' ? 'bg-error text-white' :
+                      'bg-gray-300 text-gray-700'
+                    }`}>
+                      {stage.status}
+                    </span>
+                  </div>
+                </div>
 
-              {/* Generate Test Suite Button */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <button
-                  onClick={onGenerateTestSuite}
-                  disabled={!allStagesPassed}
-                  className="w-full px-6 py-3 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  Generate Test Suite (AI)
-                </button>
-                {!allStagesPassed && (
-                  <p className="mt-2 text-sm text-center text-error">
-                    All stages must pass before generating test suite
-                  </p>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => handleRunStage(stage.id)}
+                    disabled={stage.status === 'Pass'}
+                    className="flex items-center gap-2 px-4 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Play size={18} />
+                    {stage.buttonLabel}
+                  </button>
+                  {stage.status === 'Pass' && (
+                    <button
+                      onClick={() => handleViewEvidence(stage.name)}
+                      className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    >
+                      <Eye size={18} />
+                      View evidence
+                    </button>
+                  )}
+                </div>
+
+                {stage.name.includes('Peer Review') && stage.status === 'Pass' && (
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <h4 className="mb-3 text-sm font-medium">Peer Review Status</h4>
+                    <div className="space-y-2">
+                      {peerReviews.map((review, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                          <span className="text-sm">{review.reviewer}</span>
+                          <span className="px-2 py-1 bg-success text-white rounded text-xs">
+                            Approved
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
-            </div>
+            ))}
           </div>
 
-          {/* Right - Task Pane (1/3 width) */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-24">
-              <h3 className="mb-4">Auto-imported Tasks</h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Tasks imported from Coding Tracker and Technical Design
+          {/* Generate Test Suite Button */}
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <button
+              onClick={onGenerateTestSuite}
+              disabled={!allStagesPassed}
+              className="w-full px-6 py-3 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              Generate Test Suite (AI)
+            </button>
+            {!allStagesPassed && (
+              <p className="mt-2 text-sm text-center text-error">
+                All stages must pass before generating test suite
               </p>
-              <div className="space-y-2">
-                {autoImportedTasks.map((task) => (
-                  <label key={task.id} className="flex items-start gap-2 cursor-pointer p-2 rounded hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      defaultChecked={task.completed}
-                      className="mt-1 w-4 h-4 accent-[var(--color-mccain-yellow)]"
-                    />
-                    <span className="flex-1 text-sm">{task.task}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </main>
