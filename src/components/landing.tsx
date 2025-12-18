@@ -5,9 +5,8 @@ import McCainLogo from '../imports/McCainLogo1-33-97';
 interface Stakeholder {
   id: string;
   name: string;
-  functions: string[];
+  role: string;
   team: string;
-  department: string;
   addedBy: string;
   timestamp: string;
 }
@@ -28,9 +27,8 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
   // Stakeholder modal form state
   const [stakeholderForm, setStakeholderForm] = useState({
     name: '',
-    functions: [] as string[],
-    team: '',
-    department: ''
+    role: '',
+    team: ''
   });
 
   // Requirement modal form state
@@ -41,15 +39,15 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
     kpis: ''
   });
 
-  const functionOptions = [
-    'POC – Coding',
-    'POC – UI Design',
-    'POC – Testing',
-    'POC – Training',
-    'POC – Release',
-    'POC – Architecture',
-    'POC – Data & Security',
-    'Business Owner'
+  const roleOptions = [
+    'Developer',
+    'Designer',
+    'Tester',
+    'Business Analyst',
+    'Architect',
+    'Trainer',
+    'Business Owner',
+    'Project Manager'
   ];
 
   const teamOptions = [
@@ -67,22 +65,21 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
   const departmentOptions = ['SAP', 'Non‑SAP', 'Cross‑platform'];
 
   const handleAddStakeholder = () => {
-    if (!stakeholderForm.name || stakeholderForm.functions.length === 0 || !stakeholderForm.team || !stakeholderForm.department) {
+    if (!stakeholderForm.name || !stakeholderForm.role || !stakeholderForm.team) {
       return;
     }
 
     const newStakeholder: Stakeholder = {
       id: Math.random().toString(36).substr(2, 9),
       name: stakeholderForm.name,
-      functions: stakeholderForm.functions,
+      role: stakeholderForm.role,
       team: stakeholderForm.team,
-      department: stakeholderForm.department,
       addedBy: 'Current User',
       timestamp: new Date().toISOString()
     };
 
     setStakeholders([...stakeholders, newStakeholder]);
-    setStakeholderForm({ name: '', functions: [], team: '', department: '' });
+    setStakeholderForm({ name: '', role: '', team: '' });
     setShowStakeholderModal(false);
   };
 
@@ -248,92 +245,12 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
                   <p className="text-gray-600 mb-4">Create a new SAP SDLC item</p>
                   <button
                     onClick={() => setShowRequirementModal(true)}
-                    disabled={projectMode === 'new' && stakeholders.length === 0}
-                    className="w-full px-4 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="w-full px-4 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 transition-colors"
                   >
                     New Requirement
                   </button>
                 </div>
               )}
-            </div>
-          </div>
-        </section>
-
-        {/* Stakeholder Assignment */}
-        <section className="mb-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2>Stakeholder Assignment</h2>
-              <button
-                onClick={() => setShowStakeholderModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90"
-              >
-                <Plus size={18} />
-                Add Stakeholder
-              </button>
-            </div>
-
-            {stakeholders.length > 0 ? (
-              <div className="overflow-x-auto mb-4">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-200">
-                      <th className="text-left py-3 px-4">Name</th>
-                      <th className="text-left py-3 px-4">Function(s)</th>
-                      <th className="text-left py-3 px-4">Team</th>
-                      <th className="text-left py-3 px-4">Department</th>
-                      <th className="text-left py-3 px-4">Added by</th>
-                      <th className="text-left py-3 px-4">Timestamp</th>
-                      <th className="text-left py-3 px-4">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {stakeholders.map((stakeholder) => (
-                      <tr key={stakeholder.id} className="border-b border-gray-100 hover:bg-gray-50">
-                        <td className="py-3 px-4">{stakeholder.name}</td>
-                        <td className="py-3 px-4">
-                          <div className="max-w-xs truncate" title={stakeholder.functions.join(', ')}>
-                            {stakeholder.functions.join(', ')}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4">{stakeholder.team}</td>
-                        <td className="py-3 px-4">{stakeholder.department}</td>
-                        <td className="py-3 px-4">{stakeholder.addedBy}</td>
-                        <td className="py-3 px-4">{new Date(stakeholder.timestamp).toLocaleString()}</td>
-                        <td className="py-3 px-4">
-                          <div className="flex items-center gap-2">
-                            <button className="text-blue-600 hover:text-blue-800">
-                              <Edit2 size={16} />
-                            </button>
-                            <button
-                              onClick={() => handleRemoveStakeholder(stakeholder.id)}
-                              className="text-red-600 hover:text-red-800"
-                            >
-                              <Trash2 size={16} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="text-center py-12 text-gray-500">
-                <p>No stakeholders added yet. Click "Add Stakeholder" to get started.</p>
-              </div>
-            )}
-
-            <div className="flex gap-2">
-              <button className="px-4 py-2 bg-[var(--color-mccain-black)] text-white rounded-lg hover:bg-opacity-90">
-                Save stakeholders
-              </button>
-              <button
-                onClick={() => setStakeholders([])}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-              >
-                Clear
-              </button>
             </div>
           </div>
         </section>
@@ -380,8 +297,7 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
         <div className="flex gap-4 pb-12">
           <button
             onClick={() => setShowRequirementModal(true)}
-            disabled={projectMode === 'new' && stakeholders.length === 0}
-            className="px-6 py-3 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-6 py-3 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 transition-colors"
           >
             New Requirement
           </button>
@@ -396,7 +312,7 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
 
       {/* Add Stakeholder Modal */}
       {showStakeholderModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4 backdrop-blur-sm">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3>Add Stakeholder</h3>
@@ -418,20 +334,17 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
               </div>
 
               <div>
-                <label className="block mb-2">Function / Role (multi-select)</label>
-                <div className="border border-gray-300 rounded-lg p-3 space-y-2 max-h-48 overflow-y-auto">
-                  {functionOptions.map((func) => (
-                    <label key={func} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={stakeholderForm.functions.includes(func)}
-                        onChange={() => handleToggleFunction(func)}
-                        className="w-4 h-4 accent-[var(--color-mccain-yellow)]"
-                      />
-                      <span>{func}</span>
-                    </label>
+                <label className="block mb-2">Role</label>
+                <select
+                  value={stakeholderForm.role}
+                  onChange={(e) => setStakeholderForm({ ...stakeholderForm, role: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mccain-yellow)]"
+                >
+                  <option value="">Select role...</option>
+                  {roleOptions.map((role) => (
+                    <option key={role} value={role}>{role}</option>
                   ))}
-                </div>
+                </select>
               </div>
 
               <div>
@@ -447,20 +360,6 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
                   ))}
                 </select>
               </div>
-
-              <div>
-                <label className="block mb-2">Department</label>
-                <select
-                  value={stakeholderForm.department}
-                  onChange={(e) => setStakeholderForm({ ...stakeholderForm, department: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mccain-yellow)]"
-                >
-                  <option value="">Select department...</option>
-                  {departmentOptions.map((dept) => (
-                    <option key={dept} value={dept}>{dept}</option>
-                  ))}
-                </select>
-              </div>
             </div>
 
             <div className="flex items-center justify-end gap-2 p-6 border-t border-gray-200">
@@ -472,7 +371,7 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
               </button>
               <button
                 onClick={handleAddStakeholder}
-                disabled={!stakeholderForm.name || stakeholderForm.functions.length === 0 || !stakeholderForm.team || !stakeholderForm.department}
+                disabled={!stakeholderForm.name || !stakeholderForm.role || !stakeholderForm.team}
                 className="px-4 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Add
@@ -485,7 +384,7 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
       {/* New Requirement Modal */}
       {showRequirementModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3>New Requirement</h3>
               <button onClick={() => setShowRequirementModal(false)} className="text-gray-400 hover:text-gray-600">
@@ -493,65 +392,122 @@ export function Landing({ onCreateRequirement, onOpenExisting }: LandingProps) {
               </button>
             </div>
             
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block mb-2">Name</label>
-                <input
-                  type="text"
-                  value={requirementForm.name}
-                  onChange={(e) => setRequirementForm({ ...requirementForm, name: e.target.value })}
-                  placeholder="Enter requirement name..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mccain-yellow)]"
-                />
+            <div className="p-6 space-y-6">
+              {/* Requirement Details */}
+              <div className="space-y-4">
+                <h4>Requirement Details</h4>
+                
+                <div>
+                  <label className="block mb-2">Name</label>
+                  <input
+                    type="text"
+                    value={requirementForm.name}
+                    onChange={(e) => setRequirementForm({ ...requirementForm, name: e.target.value })}
+                    placeholder="Enter requirement name..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mccain-yellow)]"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-2">Business Area</label>
+                    <select
+                      value={requirementForm.businessArea}
+                      onChange={(e) => setRequirementForm({ ...requirementForm, businessArea: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mccain-yellow)]"
+                    >
+                      <option value="">Select...</option>
+                      <option value="Sales">Sales</option>
+                      <option value="Finance">Finance</option>
+                      <option value="Operations">Operations</option>
+                      <option value="Supply Chain">Supply Chain</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block mb-2">Project Type</label>
+                    <input
+                      type="text"
+                      value="SAP"
+                      disabled
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block mb-2">Process</label>
+                  <select
+                    value={requirementForm.process}
+                    onChange={(e) => setRequirementForm({ ...requirementForm, process: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mccain-yellow)]"
+                  >
+                    <option value="">Select...</option>
+                    <option value="O2C">Order to Cash (O2C)</option>
+                    <option value="P2P">Procure to Pay (P2P)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block mb-2">KPIs</label>
+                  <textarea
+                    value={requirementForm.kpis}
+                    onChange={(e) => setRequirementForm({ ...requirementForm, kpis: e.target.value })}
+                    placeholder="Enter KPIs..."
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mccain-yellow)]"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block mb-2">Business Area</label>
-                <select
-                  value={requirementForm.businessArea}
-                  onChange={(e) => setRequirementForm({ ...requirementForm, businessArea: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mccain-yellow)]"
-                >
-                  <option value="">Select...</option>
-                  <option value="Sales">Sales</option>
-                  <option value="Finance">Finance</option>
-                  <option value="Operations">Operations</option>
-                  <option value="Supply Chain">Supply Chain</option>
-                </select>
-              </div>
+              {/* Stakeholder Assignment */}
+              <div className="border-t border-gray-200 pt-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4>Stakeholder Assignment</h4>
+                  <button
+                    onClick={() => setShowStakeholderModal(true)}
+                    className="flex items-center gap-2 px-3 py-2 bg-[var(--color-mccain-yellow)] text-[var(--color-mccain-black)] rounded-lg hover:bg-opacity-90 text-sm"
+                  >
+                    <Plus size={16} />
+                    Add Stakeholder
+                  </button>
+                </div>
 
-              <div>
-                <label className="block mb-2">Project Type</label>
-                <input
-                  type="text"
-                  value="SAP"
-                  disabled
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50"
-                />
-              </div>
-
-              <div>
-                <label className="block mb-2">Process</label>
-                <select
-                  value={requirementForm.process}
-                  onChange={(e) => setRequirementForm({ ...requirementForm, process: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mccain-yellow)]"
-                >
-                  <option value="">Select...</option>
-                  <option value="O2C">Order to Cash (O2C)</option>
-                  <option value="P2P">Procure to Pay (P2P)</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block mb-2">KPIs</label>
-                <textarea
-                  value={requirementForm.kpis}
-                  onChange={(e) => setRequirementForm({ ...requirementForm, kpis: e.target.value })}
-                  placeholder="Enter KPIs..."
-                  rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-mccain-yellow)]"
-                />
+                {stakeholders.length > 0 ? (
+                  <div className="border border-gray-200 rounded-lg overflow-hidden">
+                    <table className="w-full">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="text-left py-2 px-3 text-sm">Name</th>
+                          <th className="text-left py-2 px-3 text-sm">Role</th>
+                          <th className="text-left py-2 px-3 text-sm">Team</th>
+                          <th className="text-left py-2 px-3 text-sm">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {stakeholders.map((stakeholder) => (
+                          <tr key={stakeholder.id} className="border-t border-gray-200">
+                            <td className="py-2 px-3 text-sm">{stakeholder.name}</td>
+                            <td className="py-2 px-3 text-sm">{stakeholder.role}</td>
+                            <td className="py-2 px-3 text-sm">{stakeholder.team}</td>
+                            <td className="py-2 px-3 text-sm">
+                              <button
+                                onClick={() => handleRemoveStakeholder(stakeholder.id)}
+                                className="text-red-600 hover:text-red-800"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-gray-500 border border-gray-200 rounded-lg">
+                    <p className="text-sm">No stakeholders added yet. Click "Add Stakeholder" to get started.</p>
+                  </div>
+                )}
               </div>
             </div>
 
